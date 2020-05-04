@@ -110,23 +110,30 @@ public class List {
 			return 1;
 		}
 	}
-
+/**
+ * Returns the index of the given int in the list
+ * If the value does not exist the value is negative 
+ * @requires l.size() < 2.147.483.648
+ */
 	public static int indexInList(List l, int obj) {
 		if (List.first(l) == obj) {
 			return 0;
 		} else if (List.rest(l) != null) {
 			return indexInList(List.rest(l), obj) + 1;
 		} else {
-			return Integer.MIN_VALUE;
+			throw new IllegalArgumentException();
 		}
 	}
 
 	public static boolean inList(List l, int obj) {
-		if (indexInList(l, obj) >= 0) {
-			return true;
-		} else {
-			return false;
+		boolean output = true;
+		try {
+			indexInList(l,obj);
 		}
+		catch(Exception exc){
+			output = false;
+		}
+		return output;
 	}
 
 	public static int nthElement(List l, int n) {

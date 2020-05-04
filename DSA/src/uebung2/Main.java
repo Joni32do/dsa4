@@ -18,9 +18,9 @@ public class Main {
 		CharacterCoding coco = new CharacterCoding();
 		try {
 			int[] data = coco.readFromFile("faust.txt");
-			zippedCode z = zip(data, generateAlphabet(200)); 
+			zippedCode z = zip(data, generateAlphabet(120)); 
 			data = unzip(z);
-			coco.writeToFile("Gaam", data);
+			coco.writeToFile("Jona", data);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,9 +94,6 @@ public class Main {
 //		assertEquals(List.append(3, list));
 	}
 
-	public static void print(List a) {
-		System.out.println(a);
-	}
 
 	public static int[] unzip(zippedCode c) {
 		List alphabeet = c.getAlphabet();
@@ -120,6 +117,12 @@ public class Main {
 		return output;
 	}
 
+	
+
+	public static void print(List a) {
+		System.out.println(a);
+	}
+	
 	public static void printi(int[] array) {
 		for(int i = 0; i < array.length; i++) {
 			System.out.print(array[i] + " ");
@@ -139,9 +142,10 @@ public class Main {
 	 */
 	private static void testList() {
 		List list = new List(1, new List(2, new List(3, new List(4, new List(2, new List(3, new List(4, null)))))));
-		for(int i = 0; i < 8; i++) {
+		for(int i = 0; i < 7; i++) {
 			print(List.firstToNth(list, i));
 		}
+		System.out.println("Hallo");
 		System.out.println(List.indexInList(list,3));
 		System.out.println(list);
 		System.out.println(List.size(list));
