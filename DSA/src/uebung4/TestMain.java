@@ -8,14 +8,14 @@ public class TestMain {
 		int hashSize = 10;
 		int numberOfKeys = 20;
 		
-		OffenesHashing HashMash = new OffenesHashing(hashSize, "SuperDuperSchokoflakes");
+		OffenesHashing HashMash = new OffenesHashing(hashSize);
 		int HashKey = 0;
 		for(int i = 0; i < numberOfKeys; i++) {
 			HashKey = createPseudoHashKey();
 			System.out.println(HashKey);
 		}
 		
-		printInformation(hashSize, numberOfKeys, HashMash),
+		printInformation(hashSize, numberOfKeys, HashMash);
 	}
 
 	private static void printInformation(int hashSize, int numberOfKeys, OffenesHashing hashMash) {
