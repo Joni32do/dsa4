@@ -1,51 +1,47 @@
 package uebung4;
 
+import java.util.List;
+import java.util.Map;
+
 public class TestMain {
 
-	
 	public static void main(String[] args) {
+
 		
-		int hashSize = 10;
+		int size = 10;
 		int numberOfKeys = 20;
-		
-		OffenesHashing HashMash = new OffenesHashing(hashSize);
-		int HashKey = 0;
-		for(int i = 0; i < numberOfKeys; i++) {
-			HashKey = createPseudoHashKey();
-			System.out.println(HashKey);
+
+		OffenesHashing hashMash = new OffenesHashing(size);
+		for (int i = 0; i < numberOfKeys; i++) {
+			String value = rnd();
+			OffenesHashing.add(hashMash, value);
 		}
-		
-		printInformation(hashSize, numberOfKeys, HashMash);
-	}
 
-	private static void printInformation(int hashSize, int numberOfKeys, OffenesHashing hashMash) {
-		
-		System.out.println("Groesse der Hashtabelle: " + hashSize);
-		System.out.println("Anzahl eingefuegter Schluessel: " + numberOfKeys);
-		int alreadyCountedKeys = 0;
-		int keyCombi = 0; //How many keys in a container will be searched
-		while(alreadyCountedKeys < numberOfKeys) {
-			int currentAmount = countKeysPerContainer(hashMash, keyCombi);
-			double expectedValue = 1;
-			System.out.println(" Behälter mit " + keyCombi + " "
-					+ "Schluesseln (erwartet: " + expectedValue + " )");
-			keyCombi++;
+		OffenesHashing.printInformation(hashMash, numberOfKeys);
+
+		LinearesSondieren lin = new LinearesSondieren(size);
+		int erfolgloseSondierungsschritte = 0;
+		int exception = 0;
+		for (int i = 0; i < numberOfKeys; i++) {
+			String value = rnd();
+			try {
+				erfolgloseSondierungsschritte += LinearesSondieren.add(lin, value);
+			} catch (Exception exc) {
+				exception++;
+			}
 		}
-		
+		System.out.println();
+		System.out.println("Es musste für das Einfügen von " + numberOfKeys + " Schlüsseln in eine Liste mit " + size
+				+ " Listengliedern " + erfolgloseSondierungsschritte + " sondiert werden.");
+		System.out.println("Es gab dabei " + exception
+				+ " Exceptions, bei denen das letzte Listenglied verschoben werden sollte.");
+
 	}
 
-	private static int countKeysPerContainer(OffenesHashing hashMash, int keyCombi) {
-		int countOfContainerWithKeyCombi =  
-		
+	private static String rnd() {
+		StringBuilder s = new StringBuilder();
+		s.append((Math.random()));
+		return s.toString();
 	}
 
-	private static int createPseudoHashKey() {
-		double d = Math.random() * 10;
-		return (int) d;
-	}
-	
-	
-//	private static double binomialVerteilung(double n, double k, double p) {
-//		
-//	}
 }
