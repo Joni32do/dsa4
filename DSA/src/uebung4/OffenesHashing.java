@@ -100,15 +100,36 @@ public static void printInformation(OffenesHashing hashMash, int totalNumberOfKe
 		
 		map.forEach((keysInContainer,container) -> System.out.println("In " + container + " Containern sind " + 
 				keysInContainer + " Schlüssel. Die zu erwartende Wahrscheinlichkeit wäre " + 
-				getProbability(hashMash, keysInContainer)));		
+				getProbability(hashMash, keysInContainer, totalNumberOfKeys)));		
 	}
 
-	private static String getProbability(OffenesHashing hashMash, int keysInContainer) {
+/**
+ * Returns expected value
+ *  
+ */
+   private static String getProbability(OffenesHashing hashMash, int keysInContainer, int totalNumberOfKeys) {
 			double probability = 1 / (double) hashMash.size;
-			Double result = hashMash.size * (binKoeffizient(hashMash.size, keysInContainer))*
-					(Math.pow(probability, keysInContainer) * (Math.pow(1- probability, hashMash.size - keysInContainer)));
+			Double result = hashMash.size * (besserBinKoeffizient(totalNumberOfKeys, keysInContainer))*
+					(Math.pow(probability, keysInContainer) * (Math.pow(1- probability, totalNumberOfKeys - keysInContainer)));
 			return result.toString();
 		
+	}
+	public static long besserBinKoeffizient(long n, long k) {
+		long output = 1;
+		long teiler = 1;
+		long loops = k;
+		if(n/2 <= k) {
+			loops = n - k;
+		}
+		for(int i = 0; i < loops; i++) {
+			output *= (n - i);
+			teiler *= (i + 1);
+			if(output % teiler == 0) {
+				output = output / teiler;
+				teiler = 1;
+			}
+		}
+		return output;
 	}
 	
 	private static long binKoeffizient(long n, long k) {

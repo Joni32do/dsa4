@@ -8,8 +8,8 @@ public class TestMain {
 	public static void main(String[] args) {
 
 		
-		int size = 10;
-		int numberOfKeys = 20;
+		int size = 100;
+		int numberOfKeys = 200;
 
 		OffenesHashing hashMash = new OffenesHashing(size);
 		for (int i = 0; i < numberOfKeys; i++) {
