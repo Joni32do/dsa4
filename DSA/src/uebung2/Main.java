@@ -35,7 +35,7 @@ public class Main {
 	 * @param n
 	 * @return
 	 */
-	private static List generateAlphabet(int n) {
+	public static List generateAlphabet(int n) {
 		if(n > 0) {
 			return new List(n, generateAlphabet(n - 1));
 		}
@@ -67,7 +67,7 @@ public class Main {
 	 * @param alphabeet
 	 * @return
 	 */
-	private static zippedCode zip(int[] input, List alphabeet) {
+	public static zippedCode zip(int[] input, List alphabeet) {
 		int i = 0;
 		for (int elem : input) {
 			if (List.inList(alphabeet, elem)) {

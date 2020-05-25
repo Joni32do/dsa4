@@ -18,13 +18,14 @@ package uebung5;
  */
 public class Tree {
 
-	private Tree left;
-	private Tree right;
-	private String value;
+	public Tree left;
+	public Tree right;
+	public String value;
 	public int height; // height of subtree
 	public int balance; // balance of node leftheight - rightheight
 	public int nodeCount; // number of nodes in subtree
 	public int depthSum; // sum of depths of all nodes in subtree
+	
 
 	public Tree(Tree left, Tree right, String value) {
 		super();
@@ -94,9 +95,9 @@ public class Tree {
 	}
 
 	/**
-	 * horrible awful and ugly but our small brains haven't been capable of something that
-	 * isn't creating cancer, so we just decided to implement all for cases
-	 * 
+	 *To not use all for cases it would have been better to make getHeight
+	 *getBalance, getNodeCount and getDepthSum a function and let them handle how
+	 *to handle if the tree is null
 	 * @param u
 	 */
 	public static void setValues(Tree u) {
