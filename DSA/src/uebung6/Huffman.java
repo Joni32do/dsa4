@@ -33,6 +33,7 @@ public class Huffman {
 			}
 			Huffman huff = new Huffman(amount);
 			huff.pr.forEach(x -> binary(x,""));
+			data
 			
 //			zippedCode z = Main.zip(data, Main.generateAlphabet(120));
 //			faust.writeToFile("Matze", data);
@@ -60,7 +61,7 @@ public class Huffman {
 		return pr2;
 	}
 	
-	public static void binary(TreeElem t, String s) {
+	public static void printBinary(TreeElem t, String s) {
 		String sRight = s;
 		if (!TreeElem.isEmpty(t.left)) {
 			s = s.concat("0");
@@ -68,17 +69,31 @@ public class Huffman {
 			 * @invariant s.length() = numbersOfRecursion
 			 * @variant current depth of the knot to the depth of the leave
 			 */
-			binary(t.left, s);
+			printBinary(t.left, s);
 		}
 		if (!TreeElem.isEmpty(t.right)) {
 			sRight = sRight.concat("1");
-			binary(t.right, sRight);
+			printBinary(t.right, sRight);
 		}
 		if (TreeElem.isEmpty(t.right) && TreeElem.isEmpty(t.left)) {
 			System.out.println(s);
 
 		}
 
+	}
+	
+	public String translate(int[] input) {
+		StringBuilder s = new StringBuilder();
+		for(int elem: input) {
+			s.append(charToBinary());
+		}
+		return s.toString();
+	}
+
+
+	private String charToBinary() {
+		
+		return "Hallo";
 	}
 
 
