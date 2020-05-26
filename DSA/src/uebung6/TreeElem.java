@@ -7,7 +7,7 @@ public class TreeElem implements Comparable<TreeElem> {
 	public TreeElem left;
 	public TreeElem right;
 
-	public TreeElem(int popularity, int chaChaChar) {
+	public TreeElem(int chaChaChar, int popularity) {
 		super();
 		this.popularity = popularity;
 		this.chaChaChar = chaChaChar;
