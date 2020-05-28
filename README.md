@@ -1,4 +1,4 @@
-DSA
+*DSA*
 Datenstrukturen und Algorithmen
 
 Hier werde ich Code Programme schreiben für das Studiumsfach DSA
