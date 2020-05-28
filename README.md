@@ -1,4 +1,8 @@
-# dsa4
-uebung2 inclusive
+DSA
+Datenstrukturen und Algorithmen
 
-Irgenwie ist das jetzt das von Eclipse erstellte Projekt also schauen wir mal wie viele jetzt noch erstellt werden.
+Hier werde ich Code Programme schreiben für das Studiumsfach DSA
+
+Gerne mich auf Verbesserungen und Fehler aufmerksam machen
+
+Viel Spaß - Jonathan
