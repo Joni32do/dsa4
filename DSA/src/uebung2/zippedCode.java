@@ -4,6 +4,7 @@ public class zippedCode {
 
 	int[] zahlencode;
 	List alphabet;
+	
 	public zippedCode(int[] zahlencode, List alphabet) {
 		super();
 		this.zahlencode = zahlencode;

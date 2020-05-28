@@ -9,7 +9,7 @@ package uebung5;
  * 
  * Notes: It would have been much better to use Optional.of() instead of null
  * but we wanted to keep it simple Also you could make it generic but then the
- * Operations could't be static, so I choose integer as the value which a tree
+ * Operations could't be static, so I chose String as the value which a tree
  * is capable to hold
  * 
  * 

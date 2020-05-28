@@ -16,16 +16,18 @@ public class SearchTree {
 	public String stringRepresentation;
 
 	public SearchTree() {
-
+		value = -1;
 	}
 
 	public SearchTree(int val, String stringRep) {
 		value = val;
 		stringRepresentation = stringRep;
+		System.out.println(stringRepresentation + " und das ist der Wert : " + val);
 	}
 
 	public void insert(int val, String stringRep) {
 
+		
 		if (this.value > val) {
 			if (this.left != null) {
 				this.left.insert(val, stringRep);
@@ -44,7 +46,7 @@ public class SearchTree {
 		}
 	}
 	
-	public String search(char val) {
+	public String search(int val) {
 		if(this.value == val) {
 			return this.stringRepresentation;
 		} else if(this.value > val) {

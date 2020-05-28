@@ -10,9 +10,9 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		testList();
-		
-		testTheZip();
+//		testList();
+//		
+//		testTheZip();
 
 		
 		CharacterCoding coco = new CharacterCoding();
@@ -20,7 +20,7 @@ public class Main {
 			int[] data = coco.readFromFile("faust.txt");
 			zippedCode z = zip(data, generateAlphabet(120)); 
 			data = unzip(z);
-			coco.writeToFile("Jona", data);
+			coco.writeToFile("Testung", data);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
