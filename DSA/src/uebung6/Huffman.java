@@ -41,8 +41,8 @@ public class Huffman {
 			int[] data = faust.readFromFile("faust.txt");
 			HashMap<Integer, Integer> amount = new HashMap<Integer, Integer>();
 
-//			zippedCode z = Main.zip(data, Main.generateAlphabet(120));
-//			data = z.getZahlencode();
+			zippedCode z = Main.zip(data, Main.generateAlphabet(120));
+			data = z.getZahlencode();
 
 			for (Integer elem : data) {
 				amount.putIfAbsent(elem, 0);
@@ -54,8 +54,8 @@ public class Huffman {
 
 			data = huff.reBinary(s);
 			
-//			z.setZahlencode(data);
-//			data = Main.unzip(z);
+			z.setZahlencode(data);
+			data = Main.unzip(z);
 
 			faust.writeToFile("Matze", data);
 		} catch (IOException e) {
