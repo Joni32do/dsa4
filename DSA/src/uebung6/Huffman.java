@@ -21,51 +21,59 @@ public class Huffman {
 		pr = this.createHuffman();
 		finalTree = pr.peek();
 		createSearchTree();
-		TreeElem.printValues(finalTree, 0);
+//		TreeElem.printValues(finalTree, 0);
 	}
 
 	public static void main(String args[]) {
 
-//		int[] data = {1,1,1,1,1,1,1,4,4,4,4,4,5,2,2,2,2,2,2,2,2,2,2,2,2};
-//		HashMap<Integer, Integer> amount = new HashMap<Integer, Integer>();
-//		amount.put(1, 7);
-//		amount.put(4,5);
-//		amount.put(5, 1);
-//		amount.put(2,12);
-//		Huffman huff = new Huffman(amount);
-//		String s = huff.translate(data);
-//		System.out.println(s);
-//		data = huff.reBinary(s);
 		CharacterCoding faust = new CharacterCoding();
 		try {
 			int[] data = faust.readFromFile("faust.txt");
-			HashMap<Integer, Integer> amount = new HashMap<Integer, Integer>();
 
+			//Without move-to-front transformation
+			data = doTheHuffman(data);
+			faust.writeToFile("Without.txt", data);
+			
+			//With move-to-front transformation
 			zippedCode z = Main.zip(data, Main.generateAlphabet(120));
 			data = z.getZahlencode();
-
-			for (Integer elem : data) {
-				amount.putIfAbsent(elem, 0);
-				amount.put(elem, amount.get(elem) + 1);
-			}
-			Huffman huff = new Huffman(amount);
-			String s = huff.translate(data);
-			information(s);
-
-			data = huff.reBinary(s);
-			
+			data = doTheHuffman(data);
 			z.setZahlencode(data);
 			data = Main.unzip(z);
-
-			faust.writeToFile("Matze", data);
+			faust.writeToFile("With.txt", data);
+			
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Encrypt the data with the huffmann coding and instantly decrypt it
+	 * @param data
+	 * @return
+	 */
+	private static int[] doTheHuffman(int[] data) {
+		HashMap<Integer, Integer> amount = new HashMap<Integer, Integer>();
+		for (Integer elem : data) {
+			amount.putIfAbsent(elem, 0);
+			amount.put(elem, amount.get(elem) + 1);
+		}
+		Huffman huff = new Huffman(amount);
+		String s = huff.translate(data);
+		information(s);
+
+		data = huff.reBinary(s);
+		return data;
+	}
+
 	private static void information(String s) {
 
+		System.out.println("----------------------------------------------------");
+		System.out.println("    D A S   S I N D   D I E   W I C H T I G E N     ");
+		System.out.println("            I N F O R M A T I O N E N               ");
 		System.out.println("Die Zeichenkette hat die Größe von " + s.length() / 8 + " Bytes");
+		System.out.println("----------------------------------------------------");
 	}
 
 	public PriorityQueue<TreeElem> createHuffman() {
@@ -105,6 +113,7 @@ public class Huffman {
 	}
 
 	/**
+	 * From binary String back to int[]
 	 * @requires String contains only 0 and 1
 	 * @requires String is able to build a int[] with this.finalTree
 	 * @param s
@@ -113,8 +122,7 @@ public class Huffman {
 	private int[] reBinary(String s) {
 		TreeElem tree = this.finalTree;
 		int size = s.length();
-		int[] outputArray = new int[190778]; // TODO ACHTUNG DAS IST KEINE WARNUNG HIER MUSS NOCDH DIE GRÖ?E DES
-												// FELDS GEÄNDERT WERDEN SONST EXPLODIERT ALLEDAS IST EINE WAHRNUNG
+		int[] outputArray = new int[getOutputSize(s)]; 
 		int typer = 0;
 		for (int i = 0; i < size; i++) {
 			if (s.charAt(i) == '0' && tree.left != null) {
@@ -130,6 +138,29 @@ public class Huffman {
 		}
 		outputArray[typer] = tree.chaChaChar; // necessary for last digit
 		return outputArray;
+	}
+
+	/**
+	 * A method which should not exist but is a simple way to gain the length of the output
+	 * This could also be achieved by saving the length in the huff as a variable  
+	 */
+	private int getOutputSize(String s) {
+		int output = 0;
+		int size = s.length();
+		TreeElem tree = this.finalTree;
+		for (int i = 0; i < size; i++) {
+			if (s.charAt(i) == '0' && tree.left != null) {
+				tree = tree.left;
+			} else if (s.charAt(i) == '1' && tree.right != null) {
+				tree = tree.right;
+			} else {
+				output++;
+				i--;
+				tree = this.finalTree;
+			}
+			
+		}
+		return output + 1;
 	}
 
 	public String translate(int[] input) {
