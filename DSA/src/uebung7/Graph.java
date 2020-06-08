@@ -1,6 +1,5 @@
 package uebung7;
 
-import javax.rmi.CORBA.Tie;
 
 /**
  * Gerichtete Graphen mittels Adjazenzlisten
