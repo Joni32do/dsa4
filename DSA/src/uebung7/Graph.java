@@ -83,6 +83,8 @@ public class Graph {
 		g.printMatrix(g.adjazenMatrix());
 		g.tiefenSuche(2,4);
 		g.tiefenSuche(1,3);
+		g.tiefenSuche(0, 4);
+		g.tiefenSuche(3, 3);
 	}
 
 	/**
@@ -95,16 +97,13 @@ public class Graph {
 		int dim = nachbarn.length;
 		int[][] matrix = new int[dim][dim];
 		for (int i = 0; i < dim; i++) {
-			int j = 0;
 			for (int k = 0; k < dim; k++) {
 				matrix[i][k] = 0;
 			}
-
 			Knotenliste lauf = nachbarn[i];
 			while (lauf != null) {
 				matrix[i][lauf.knoten] = 1;
 				lauf = lauf.succ;
-				j++;
 
 			}
 		}
@@ -139,20 +138,28 @@ public class Graph {
 		}
 
 		visited = tiefenSuche(visited, begKnot, endKnot);
-
+		System.out.println();
 	}
 
+	
+	/**
+	 * In der jetzigen Version hört das Programm nicht mit der Rekursion auf, 
+	 * wenn der Zielknoten gefunden wurde
+	 * 
+	 * 
+	 */
 	private boolean[] tiefenSuche(boolean[] visited, int currentKnot, int endKnot) {
 		if (!visited[currentKnot]) {
 			System.out.println("Bearbeitung des " + currentKnot + ". Knotens wird begonnen");
 			
 			if (currentKnot == endKnot) {
+				visited[currentKnot] = true;
 				System.out.println("Der Endknoten wurde gefunden!");
+				
 			} else {
 				visited[currentKnot] = true;
 				Knotenliste lauf = nachbarn[currentKnot];
 				while (lauf != null) {
-					System.out.println(lauf.knoten);
 					visited = tiefenSuche(visited, lauf.knoten, endKnot);
 					lauf = lauf.succ;
 				}
@@ -161,6 +168,19 @@ public class Graph {
 		}
 
 		return visited;
+	}
+	
+	public Knotenliste topologischeSortierung() {
+		
+		Knotenliste list = nachbarn[1];
+		
+		
+		//Speichern das man bereits besuchte Felder nicht erneute besuchen muss	
+		
+		if(cuurentKnot == elem) {
+			throw new IllegalArgumentException("Zyklus entdeckt bei" + currentKnot);
+		}
+		return null;
 	}
 
 }
