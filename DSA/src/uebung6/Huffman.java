@@ -53,7 +53,7 @@ public class Huffman {
 	 * @param data
 	 * @return
 	 */
-	private static int[] doTheHuffman(int[] data) {
+	public static int[] doTheHuffman(int[] data) {
 		HashMap<Integer, Integer> amount = new HashMap<Integer, Integer>();
 		for (Integer elem : data) {
 			amount.putIfAbsent(elem, 0);

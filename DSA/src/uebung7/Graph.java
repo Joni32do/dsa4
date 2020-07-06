@@ -1,5 +1,6 @@
 package uebung7;
 
+import java.util.LinkedList;
 
 /**
  * Gerichtete Graphen mittels Adjazenzlisten
@@ -27,12 +28,26 @@ public class Graph {
 			knoten = v;
 			succ = l;
 		}
+
+		public int length() {
+			int i = 1;
+			Knotenliste lauf = this;
+			while (lauf.succ != null) {
+				i++;
+				lauf = this.succ;
+			}
+			return i;
+		}
 	}
 
 	/**
 	 * Feld mit den Adjazenzlisten
 	 */
 	public Knotenliste[] nachbarn;
+
+	public int[] eingangsgrad;
+	public int[] ausgangsgrad;
+	public int[] grad;
 
 	/**
 	 * Graph aus Feld von Kanten erstellen
@@ -59,17 +74,30 @@ public class Graph {
 			}
 		}
 		if (min < 0) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Knoten ist negativ");
 		}
 		// Adjazenzlisten initialisieren
 		nachbarn = new Knotenliste[max + 1];
+		eingangsgrad = new int[max + 1];
+		ausgangsgrad = new int[max + 1];
+		grad = new int[max + 1];
+
 		for (int i = 0; i < nachbarn.length; i++) {
 			nachbarn[i] = null;
+			eingangsgrad[i] = 0;
+			ausgangsgrad[i] = 0;
+			grad[i] = 0;
 		}
 		// Kanten einfuegen
 		for (int i = 0; i < kanten.length; i++) {
 			int von = kanten[i][0], nach = kanten[i][1];
 			nachbarn[von] = new Knotenliste(nachbarn[von], nach);
+			ausgangsgrad[von]++;
+			eingangsgrad[nach]++;
+		}
+
+		for (int i = 0; i < grad.length; i++) {
+			grad[i] = eingangsgrad[i] + ausgangsgrad[i];
 		}
 	}
 
@@ -77,13 +105,17 @@ public class Graph {
 	 * Main
 	 */
 	public static void main(String args[]) {
-		int[][] input = { { 0, 1 }, { 1, 0 }, { 0, 3 }, { 1, 3 }, { 3, 4 }, { 4, 2 }, { 2, 4 }, { 2, 2 } };
+//		int[][] input = { { 0, 1 }, { 1, 0 }, { 0, 3 }, { 1, 3 }, { 3, 4 }, { 4, 2 }, { 2, 4 }, { 2, 2 } };
+//		int[][] input = { {0,1},{1,2},{2,3},{3,4},{3,5} };´
+		int[][] input = { {6,1},{1,2},{2,3},{3,4},{3,5},{0,6} };
 		Graph g = new Graph(input);
 		g.printMatrix(g.adjazenMatrix());
-		g.tiefenSuche(2,4);
-		g.tiefenSuche(1,3);
-		g.tiefenSuche(0, 4);
-		g.tiefenSuche(3, 3);
+		g.tiefenSuche(2);
+		g.tiefenSuche(1);
+		g.tiefenSuche(0);
+		g.tiefenSuche(3);
+		LinkedList<Integer> test = g.topologischeSortierung(1);
+		test.forEach(x -> System.out.println(x));
 	}
 
 	/**
@@ -103,12 +135,17 @@ public class Graph {
 			while (lauf != null) {
 				matrix[i][lauf.knoten] = 1;
 				lauf = lauf.succ;
-
 			}
 		}
 		return matrix;
 	}
 
+	
+	/**
+	 * Creates a String Representation of a matrix
+	 * @param mat is a n * m matrix
+	 * @returns the String representation
+	 */
 	public String stringMatrix(int[][] mat) {
 		StringBuilder s = new StringBuilder();
 		s.append("\n");
@@ -124,9 +161,122 @@ public class Graph {
 		return s.toString();
 	}
 
+	/**
+	 * Prints the matrix out in the console
+	 * @param mat
+	 */
 	public void printMatrix(int[][] mat) {
 		System.out.println(stringMatrix(mat));
 	}
+
+	
+	/**
+	 * Beginn der Tiefensuche
+	 * 
+	 * Initialisiert boolean array und benutzt diesen für eine iterative Suche
+	 * @param begKnot
+	 */
+	public void tiefenSuche(int begKnot) {
+		boolean[] visited = new boolean[nachbarn.length];
+
+		// initialisiere visisited
+		for (int i = 0; i < nachbarn.length; i++) {
+			visited[i] = false;
+		}
+		visited = tiefenSuche(visited, begKnot);
+		System.out.println(); //Just to make space
+	}
+
+	/**
+	 * rekursiver Aufruf mit liste die bereits bearbeitete Knoten enthält
+	 */
+	private boolean[] tiefenSuche(boolean[] visited, int currentKnot) {
+		if (!visited[currentKnot]) {
+			System.out.println("Bearbeitung des " + currentKnot + ". Knotens wird begonnen");
+
+			visited[currentKnot] = true;
+			Knotenliste lauf = nachbarn[currentKnot];
+			while (lauf != null) {
+				visited = tiefenSuche(visited, lauf.knoten);
+				lauf = lauf.succ;
+
+			}
+			System.out.println("Bearbeitung des " + currentKnot + ". Knotens ist vollständig");
+		}
+
+		return visited;
+	}
+
+
+
+//	class Sequence {
+//		boolean[] visited;
+//		LinkedList<Integer> list;
+//
+//		public Sequence(boolean[] visited, LinkedList<Integer> list) {
+//			super();
+//			this.visited = visited;
+//			this.list = list;
+//		}
+//
+//	}
+
+	public LinkedList<Integer> topologischeSortierung(int begKnot) {
+		
+		LinkedList<Integer> linkedList = new LinkedList<Integer>();
+		boolean finished = false;
+		int[] currentEinGrad = eingangsgrad.clone();
+
+		boolean[] visited = new boolean[nachbarn.length];
+		// initialisiere visisited
+		for (int i = 0; i < nachbarn.length; i++) {
+			visited[i] = false;
+		}
+		//Schleife statt iterativ bis fertig, da wenn Topologische Sortierung existiert,
+		//alle Knoten einmal hinzugefügt werden müssen
+		for(int j = 0; j < nachbarn.length;j++) {
+			
+			int i = 0;
+			
+			/** Sucht mir den neusten verfügbaren leeren Knoten, der den 
+			*   Eingangsgrad 0 hat, erhöht mir mein i bis zu dem ersten Verfügbaren
+			*   Knoten, gibt es diesen nicht, so wurde ein Zyklus entdeckt
+			**/
+			while (visited[i] || currentEinGrad[i] != 0) {
+				i++;
+				if (i >= nachbarn.length) {
+					throw new IllegalArgumentException("Zyklus entdeckt !");
+				}
+			}
+			linkedList.add(i);
+			visited[i] = true;
+			Knotenliste lauf = nachbarn[i];
+			
+			/**
+			 * Geht die Adjazenzliste durch und vermindert für jeden der Knoten
+			 * den geklonten Eingangsgrad um eins
+			 */
+			while (lauf != null) {
+				currentEinGrad[lauf.knoten]--;
+				lauf = lauf.succ;
+			}
+			
+		}
+		return linkedList;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Hier hab ich die Tiefensuche überladen, sodass man gegebenfalls auch nach
+	 * einem speziellen Knoten suchen kann
+	 */
 
 	public void tiefenSuche(int begKnot, int endKnot) {
 		boolean[] visited = new boolean[nachbarn.length];
@@ -137,24 +287,22 @@ public class Graph {
 		}
 
 		visited = tiefenSuche(visited, begKnot, endKnot);
-		System.out.println();
 	}
 
-	
 	/**
-	 * In der jetzigen Version hört das Programm nicht mit der Rekursion auf, 
-	 * wenn der Zielknoten gefunden wurde
+	 * In der jetzigen Version hört das Programm nicht mit der Rekursion auf, wenn
+	 * der Zielknoten gefunden wurde
 	 * 
 	 * 
 	 */
 	private boolean[] tiefenSuche(boolean[] visited, int currentKnot, int endKnot) {
 		if (!visited[currentKnot]) {
 			System.out.println("Bearbeitung des " + currentKnot + ". Knotens wird begonnen");
-			
+
 			if (currentKnot == endKnot) {
 				visited[currentKnot] = true;
 				System.out.println("Der Endknoten wurde gefunden!");
-				
+
 			} else {
 				visited[currentKnot] = true;
 				Knotenliste lauf = nachbarn[currentKnot];
@@ -167,19 +315,6 @@ public class Graph {
 		}
 
 		return visited;
-	}
-	
-	public Knotenliste topologischeSortierung() {
-		
-		Knotenliste list = nachbarn[1];
-		
-		
-		//Speichern das man bereits besuchte Felder nicht erneute besuchen muss	
-		
-		if(cuurentKnot == elem) {
-			throw new IllegalArgumentException("Zyklus entdeckt bei" + currentKnot);
-		}
-		return null;
 	}
 
 }
