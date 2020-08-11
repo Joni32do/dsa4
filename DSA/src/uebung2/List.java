@@ -180,7 +180,7 @@ public class List {
 		return end;
 	}
 
-	public static List NthToFirst(List l, int n) {
+	public static List nthToFirst(List l, int n) {
 		List output = List.get(l, n);
 		List memory = List.rest(output);
 		output.succ = l;
