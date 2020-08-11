@@ -45,6 +45,22 @@ public class Tree {
 		}
 	}
 
+	public static int size(Tree t) {
+		if (Tree.isEmpty(t)) {
+			return 0;
+		} else {
+			int output = 1;
+
+			if (!Tree.isEmpty(t.left)) {
+				output += Tree.size(t.left);
+			}
+			if (!Tree.isEmpty(t.right)) {
+				output += Tree.size(t.right);
+			}
+			return output;
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
@@ -140,6 +156,23 @@ public class Tree {
 	 * @param s The String representation
 	 * @return The tree according to the String
 	 */
+	public static Tree stringToTree(String s, boolean better) {
+		Tree left;
+		Tree right;
+		if (s.isBlank()) {
+			return Tree.empty();
+		} else if (s.charAt(0) == '[') {
+			left = stringToTree(s.substring(1), true);
+			int size = 2 * Tree.size(left) + 2; //Einmal auf und einmal zu pro Knoten und 2 als ELementarfall
+			right = stringToTree(s.substring(size), true);
+		} else if (s.charAt(0) == ']') {
+			return Tree.empty();
+		} else {
+			throw new IllegalArgumentException();
+		}
+		return new Tree(left, right, 1);
+	}
+
 	public static Tree stringToTree(String s) {
 		Tree left;
 		Tree right;
@@ -154,7 +187,8 @@ public class Tree {
 				if (l.length() > 0) {
 					/**
 					 * @variant l.length() is decreasing (so the recursion must be finite)
-					 * @invariant l is the first fully closed brackets of the String just without them
+					 * @invariant l is the first fully closed brackets of the String just without
+					 *            them
 					 */
 					left = stringToTree(l);
 				} else {

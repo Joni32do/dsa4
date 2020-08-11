@@ -48,6 +48,7 @@ public class Graph {
 	public int[] eingangsgrad;
 	public int[] ausgangsgrad;
 	public int[] grad;
+	public int[][] adjazenzMatrix;
 
 	/**
 	 * Graph aus Feld von Kanten erstellen
@@ -61,9 +62,6 @@ public class Graph {
 		// dabei pruefen, dass alle Felder 2 nichtneg.
 		// Zahlen enthalten
 		for (int i = 0; i < kanten.length; i++) {
-			if (kanten[i].length != 2) {
-				throw new IllegalArgumentException();
-			}
 			for (int j = 0; j < 2; j++) {
 				if (kanten[i][j] < min) {
 					min = kanten[i][j];
@@ -109,7 +107,7 @@ public class Graph {
 //		int[][] input = { {0,1},{1,2},{2,3},{3,4},{3,5} };´
 		int[][] input = { {6,1},{1,2},{2,3},{3,4},{3,5},{0,6} };
 		Graph g = new Graph(input);
-		g.printMatrix(g.adjazenMatrix());
+		g.printMatrix(g.adjazenzMatrix());
 		g.tiefenSuche(2);
 		g.tiefenSuche(1);
 		g.tiefenSuche(0);
@@ -124,7 +122,10 @@ public class Graph {
 	 * @return n*n - Matrix von int, Komponenten (i,j) ist 1, falls Kante von i nach
 	 *         j ex. sonst 0
 	 */
-	public int[][] adjazenMatrix() {
+	public int[][] adjazenzMatrix() {
+		if(adjazenzMatrix != null) {
+			return adjazenzMatrix;
+		} else {
 		int dim = nachbarn.length;
 		int[][] matrix = new int[dim][dim];
 		for (int i = 0; i < dim; i++) {
@@ -137,7 +138,9 @@ public class Graph {
 				lauf = lauf.succ;
 			}
 		}
+		adjazenzMatrix = matrix;
 		return matrix;
+		}
 	}
 
 	

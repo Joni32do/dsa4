@@ -110,6 +110,16 @@ public class List {
 			return 1;
 		}
 	}
+	
+	public static List get(List l, int n) {
+//		if(List.size(l) <= n) {
+//			throw new IllegalArgumentException("Index out of Bound");
+//		}
+		for(int i = 0; i < n; i++) {
+			l = l.succ;
+		}
+		return l;
+	}
 /**
  * Returns the index of the given int in the list
  * If the value does not exist the value is negative 
@@ -143,7 +153,8 @@ public class List {
 		}
 		return List.first(copy);
 	}
-
+	
+	
 	public static List listBefore(List l, int n) {
 		List end = List.copy(l);
 		List beg = List.empty();
@@ -169,6 +180,17 @@ public class List {
 		return end;
 	}
 
+	public static List NthToFirst(List l, int n) {
+		List output = List.get(l, n);
+		List memory = List.rest(output);
+		output.succ = l;
+		List.get(output, n).succ = memory;		
+		
+		return output;
+		
+	}
+	
+	
 	public static List removeNthElement(List l, int n) {
 		if (n == 0) {
 			return List.listAfter(l, n);

@@ -10,21 +10,23 @@ public class Main {
 
 	public static void main(String[] args) {
 
-//		testList();
+		testList();
 //		
 //		testTheZip();
 
 		
-		CharacterCoding coco = new CharacterCoding();
-		try {
-			int[] data = coco.readFromFile("faust.txt");
-			zippedCode z = zip(data, generateAlphabet(120)); 
-			data = unzip(z);
-			coco.writeToFile("Testung", data);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+//		
+//		CharacterCoding coco = new CharacterCoding();
+//		try {
+//			int[] data = coco.readFromFile("faust.txt");
+//			zippedCode z = zip(data, generateAlphabet(120)); 
+//			data = unzip(z);
+//			coco.writeToFile("Testung", data);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	
 
@@ -142,27 +144,29 @@ public class Main {
 	 */
 	private static void testList() {
 		List list = new List(1, new List(2, new List(3, new List(4, new List(2, new List(3, new List(4, null)))))));
+		print(list);
 		for(int i = 0; i < 7; i++) {
-			print(List.firstToNth(list, i));
+			list = List.NthToFirst(list, i);
+			print(list);
 		}
-		System.out.println("Hallo");
-		System.out.println(List.indexInList(list,3));
-		System.out.println(list);
-		System.out.println(List.size(list));
-		print(List.rest(list));
-		print(List.concat(list, new List(2, new List(3, new List(4, null)))));
-		print(List.concat(list, new List(4, null)));
-		print(List.append(2, list));
-		print(list);
-		System.out.println(List.indexInList(list, 4));
-		System.out.println(List.inList(list, 5));
-		System.out.println(list);
-		System.out.println(List.removeNthElement(list, 1));
-		System.out.println(List.removeNthElement(list, 0));
-		print(list);
-		print(List.firstToNth(list, 5));
-		print(List.firstToNth(list, 0));
-		print(list);
+//		System.out.println(List.indexInList(list,3));
+//		System.out.println(list);
+//		System.out.println(List.size(list));
+//		print(List.rest(list));
+//		print(List.concat(list, new List(2, new List(3, new List(4, null)))));
+//		print(List.concat(list, new List(4, null)));
+//		print(List.append(2, list));
+//		print(list);
+//		System.out.println(List.indexInList(list, 4));
+//		System.out.println(List.inList(list, 5));
+//		System.out.println(list);
+//		System.out.println(List.removeNthElement(list, 1));
+//		System.out.println(List.removeNthElement(list, 0));
+//		print(list);
+//		print(List.firstToNth(list, 5));
+//		print(List.firstToNth(list, 0));
+//		print(list);
 
 	}
 }
+	

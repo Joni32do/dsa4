@@ -75,7 +75,7 @@ public class Sortieren {
 			}
 		}
 	}
-	
+
 	/**
 	 * Insertsort
 	 * 
@@ -84,7 +84,7 @@ public class Sortieren {
 	static void insertsort(int[] a) {
 		long vertauschungen = 0;
 		long vergleiche = 0;
-		
+
 		for (int i = 1; i < a.length; i++) {
 			int j = i - 1;
 			int change = a[i];
@@ -101,13 +101,47 @@ public class Sortieren {
 
 		System.out.println("Vergleiche: " + vergleiche);
 	}
-	
+
 	/**
 	 * Quicksort
 	 * 
 	 */
-	public static void Quicksort(){
-		
+	public static int inversioncount = 0;
+
+	public static void quicksort(int[] a) {
+		quicksort(a, 0, a.length - 1);
+	}
+
+	public static void quicksort(int[] a, int from, int to) {
+		if (to > from) {
+			int pivot = a[(from + to) / 2]; // willkürliche Wahl des Pivot Elements
+			int x = from;
+			int y = to;
+			boolean inv = false;
+			while (x < y) {
+				inv = !inv;
+				while (a[x] < pivot) {
+					x++;
+				}
+				while (a[y] > pivot) {
+					y--;
+				}
+				if (x <= y) {
+					int memo = a[x];
+					a[x] = a[y];
+					a[y] = memo;
+					if (inv) {
+						inversioncount += 1 + (y - x - 1) * 2;
+					} else {
+						inversioncount -= 1 + (y - x - 1) * 2;
+					}
+					x++;
+					y--;
+				}
+			}
+			quicksort(a, from, y);
+			quicksort(a, x, to);
+		}
 	}
 
 	public static void slowsort(int[] a) {
@@ -115,16 +149,50 @@ public class Sortieren {
 	}
 
 	public static void slowsort(int[] a, int i, int j) {
-		if(i >= j) {
-			int m = (i+j)/2;
-			slowsort(a,i,m);
-			slowsort(a,m+1,j);
-			if(a[j]<a[m]) {
+		if (i >= j) {
+			int m = (i + j) / 2;
+			slowsort(a, i, m);
+			slowsort(a, m + 1, j);
+			if (a[j] < a[m]) {
 				int p = a[m];
 				a[m] = a[j];
 				a[j] = p;
 			}
-			slowsort(a,i,j-1);
+			slowsort(a, i, j - 1);
+		}
+	}
+
+	public static void mergesort(int[] a) {
+		mergesort(a, 0, a.length - 1);
+	}
+
+	public static void mergesort(int[] a, int from, int to) {
+		if ((to - from) > 0) {
+			int divide = (from + to)/2;
+			mergesort(a, from, divide);
+			mergesort(a, divide + 1, to);
+			int x = 0;
+			int y = divide + 1;
+			int[] memory = new int[divide - from + 1];
+			for (int i = 0; i < divide - from + 1; i++) {
+				memory[i] = a[from + i];
+			}
+			int i = from;
+			while (x < memory.length) {
+				if (y > to) {
+					a[i] = memory[x];
+					x++;
+				} else if (memory[x] < a[y]) {
+					a[i] = memory[x];
+					x++;
+				} else {
+					a[i] = a[y];
+					y++;
+					inversioncount += memory.length - x; 
+				}
+				i++;
+			}
+
 		}
 	}
 
@@ -134,30 +202,51 @@ public class Sortieren {
 	 * @param args Kommandozeilenparameter (hier nicht verwendet)
 	 */
 	public static void main(String[] args) {
-		int[] a;
+		int[] a = { 27, 4, 7, 0, 2, 9, 15 };
+//		quicksort(a);
+//		druckeFeld(a, "", "-", "");
 
-		System.out.println("Bubblesort:");
-		a = erzeugeFeld(5, 100);
-//        druckeFeld(a, "Test - Vorher:  ", "-", ".\n");
+		System.out.println("Quicksort:");
+		a = erzeugeFeld(5, 10);
+		druckeFeld(a, "Test - Vorher: ", "-", ".\n");
 		starteUhr();
-		bubblesort(a);
+		quicksort(a);
 		System.out.println(wieLange());
+		druckeFeld(a, "Test - Nachher: ", "-", ".\n");
+		System.out.println("Inversioncount: " + inversioncount);
+		inversioncount = 0;
+
+		System.out.println("Mergesort:");
+		a = erzeugeFeld(10, 4);
+		druckeFeld(a, "Test - Vorher: ", "-", ".\n");
+		starteUhr();
+		mergesort(a);
+		System.out.println(wieLange());
+		druckeFeld(a, "Test - Nachher: ", "-", ".\n");
+		System.out.println("Inversioncount: " + inversioncount);
+
+//		System.out.println("Bubblesort:");
+//		a = erzeugeFeld(5, 100);
+////        druckeFeld(a, "Test - Vorher:  ", "-", ".\n");
+//		starteUhr();
+//		bubblesort(a);
+//		System.out.println(wieLange());
+////        druckeFeld(a, "Test - Nachher: ", "-", ".\n");
+//
+//		System.out.println("Insertsort:");
+//		a = erzeugeFeld(50000, 10000000);
+////        druckeFeld(a, "Test - Vorher:  ", "-", ".\n");
+//		starteUhr();
+//		insertsort(a);
+//		System.out.println(wieLange());
 //        druckeFeld(a, "Test - Nachher: ", "-", ".\n");
 
-		System.out.println("Insertsort:");
-		a = erzeugeFeld(500000, 10000000);
+//		System.out.println("Slowsort:");
+//		a = erzeugeFeld(5, 100);
 //        druckeFeld(a, "Test - Vorher:  ", "-", ".\n");
-		starteUhr();
-		insertsort(a);
-		System.out.println(wieLange());
+//		starteUhr();
+//		slowsort(a);
+//		System.out.println(wieLange());
 //        druckeFeld(a, "Test - Nachher: ", "-", ".\n");
-		
-		System.out.println("Slowsort:");
-		a = erzeugeFeld(5, 100);
-        druckeFeld(a, "Test - Vorher:  ", "-", ".\n");
-		starteUhr();
-		slowsort(a);
-		System.out.println(wieLange());
-        druckeFeld(a, "Test - Nachher: ", "-", ".\n");
 	}
 }
